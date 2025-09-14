@@ -1,26 +1,28 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const morgan = require('morgan');
 
 dotenv.config();
-
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(cors());
+app.use(morgan('dev'));
 
-// Routes placeholder
-import authRoutes from "./routes/authRoutes.js";
-import memberRoutes from "./routes/memberRoutes.js";
-import specialistRoutes from "./routes/specialistRoutes.js";
+// member routes
+const membersRouter = require('./routes/members');
+app.use('/api/members', membersRouter);
 
-app.use("/api/auth", authRoutes);
-app.use("/api/members", memberRoutes);
-app.use("/api/specialists", specialistRoutes);
+// default
+app.get('/', (req, res) => res.send('Member backend running'));
 
-// DB connect
-mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/appointments")
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+const PORT = process.env.PORT || 4000;
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('MongoDB connected');
+    app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+  })
+  .catch(err => console.error('DB connection error', err));
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+

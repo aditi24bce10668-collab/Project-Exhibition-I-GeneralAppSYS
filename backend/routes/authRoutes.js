@@ -1,12 +1,35 @@
-import express from "express";
-const router = express.Router();
+const jwt = require('jsonwebtoken');
+const Member = require('../models/Member');
 
-router.post("/register", (req, res) => {
-  res.json({ message: "Register route works" });
-});
+const authenticateMember = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: 'Access denied. No token provided.'
+      });
+    }
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const member = await Member.findById(decoded.id).select('-password');
+    
+    if (!member) {
+      return res.status(401).json({
+        success: false,
+        message: 'Token is not valid.'
+      });
+    }
+    
+    req.member = member;
+    next();
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: 'Token is not valid.'
+    });
+  }
+};
 
-router.post("/login", (req, res) => {
-  res.json({ message: "Login route works" });
-});
-
-export default router;
+module.exports = { authenticateMember };

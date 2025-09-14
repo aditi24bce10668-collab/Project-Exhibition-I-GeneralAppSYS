@@ -1,0 +1,65 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "Member API Tests",
+  "dateExported": "2023-12-15T10:30:00.000Z",
+  "version": "1.0",
+  "folders": [
+    {
+      "name": "Specialists",
+      "id": "specialists-folder"
+    },
+    {
+      "name": "Appointments",
+      "id": "appointments-folder"
+    }
+  ],
+  "requests": [
+    {
+      "_id": "get-specialists",
+      "colId": "member-collection",
+      "containerId": "specialists-folder",
+      "name": "GET All Specialists",
+      "url": "http://localhost:5000/api/member/specialists",
+      "method": "GET",
+      "sortNum": 10000
+    },
+    {
+      "_id": "get-specialists-by-category",
+      "colId": "member-collection",
+      "containerId": "specialists-folder",
+      "name": "GET Specialists by Category",
+      "url": "http://localhost:5000/api/member/specialists?category=Cardiology",
+      "method": "GET",
+      "sortNum": 20000
+    },
+    {
+      "_id": "get-specialist-details",
+      "colId": "member-collection",
+      "containerId": "specialists-folder",
+      "name": "GET Specialist Details",
+      "url": "http://localhost:5000/api/member/specialists/:id",
+      "method": "GET",
+      "sortNum": 30000
+    },
+    {
+      "_id": "create-appointment",
+      "colId": "member-collection",
+      "containerId": "appointments-folder",
+      "name": "POST Create Appointment",
+      "url": "http://localhost:5000/api/member/appointments",
+      "method": "POST",
+      "body": "{\n  \"specialistId\": \"specialist_id_here\",\n  \"date\": \"2023-12-20\",\n  \"timeSlot\": \"10:00-11:00\",\n  \"reason\": \"Regular checkup\",\n  \"notes\": \"Please bring previous reports\"\n}",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer your_token_here"
+        }
+      ],
+      "sortNum": 40000
+    }
+  ]
+}
